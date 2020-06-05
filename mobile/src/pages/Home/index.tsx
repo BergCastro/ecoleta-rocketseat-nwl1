@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { Feather as Icon } from '@expo/vector-icons';
+import RNPickerSelect from 'react-native-picker-select';
+import { Feather as Icon, Entypo } from '@expo/vector-icons';
 import { 
   StyleSheet, 
   ImageBackground, 
@@ -48,7 +49,27 @@ const Home: React.FC = () => {
         </View>
 
         <View style={styles.footer}>
-        <TextInput 
+
+        <RNPickerSelect
+            placeholder={{
+              label: 'Selecione uma cidade',
+              value: null,
+              color: '#9EA0A4',
+            }}
+            style={pickerSelectStyles}
+            onValueChange={(value) => console.log(value)}
+            items={[
+                { label: 'Football', value: 'football' },
+                { label: 'Baseball', value: 'baseball' },
+                { label: 'Hockey', value: 'hockey' },
+            ]}
+            // style={styles.input} 
+           
+            Icon={() => {
+              return <Entypo name="chevron-small-down" size={24} color="#ccc" />;
+            }}
+        />
+        {/* <TextInput 
             style={styles.input} 
             placeholder="Digite a UF"
             value={uf}
@@ -57,7 +78,7 @@ const Home: React.FC = () => {
             autoCapitalize="characters"
             autoCorrect={false}
             
-          />
+          /> */}
 
           <TextInput 
             style={styles.input} 
@@ -91,6 +112,28 @@ export default Home;
 
 
 
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    height: 60,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    marginBottom: 8,
+    paddingHorizontal: 24,
+    fontSize: 16,
+  },
+  inputAndroid: {
+    height: 60,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    marginBottom: 8,
+    paddingHorizontal: 24,
+    fontSize: 16,
+  },
+  iconContainer: {
+    top: 18,
+    right: 12,
+  },
+});
 
 
 
