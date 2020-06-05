@@ -39,7 +39,7 @@ const Points: React.FC = () => {
 
   const routeParams = route.params as Params;
 
-  const [initialPosition, setInitialPsition] = useState<[number, number]>([0,0]);
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([0,0]);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -51,12 +51,12 @@ const Points: React.FC = () => {
         return;
       }
 
-      const location = await Location.getCurrentPositionAsync();
+      const location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
 
       const { latitude, longitude } = location.coords;
 
 
-      setInitialPsition([
+      setInitialPosition([
         latitude,
         longitude
       ])

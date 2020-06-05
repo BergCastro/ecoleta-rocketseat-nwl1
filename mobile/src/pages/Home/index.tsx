@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import RNPickerSelect from 'react-native-picker-select';
 import { Feather as Icon, Entypo } from '@expo/vector-icons';
 import { 
@@ -14,11 +15,19 @@ import {
 } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+interface IBGEUFResponse {
+  sigla: string;
+}
 
+interface IBGECityResponse {
+  nome: string;
+}
 
 const Home: React.FC = () => {
   const [ uf, setUf ] = useState('');
   const [ city, setCity ] = useState('');
+  const [ufs, setUfs] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
   const navigation = useNavigation();
 
   function handleNavigateToPoints() {
@@ -28,6 +37,29 @@ const Home: React.FC = () => {
     });
 
   }
+
+  useEffect(() => {
+    axios.get<IBGEUFResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(response => {
+        const ufInitials = response.data.map(uf => uf.sigla);
+
+        setUfs(ufInitials);
+      })
+  }, [])
+
+  useEffect(() => {
+    if (uf === '') {
+      return;
+    }
+    axios
+      .get<IBGECityResponse[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`)
+      .then(response => {
+        const cityNames = response.data.map(city => city.nome);
+
+        setCities(cityNames);
+      })
+  }, [uf])
+
+ 
 
   return (
     <KeyboardAvoidingView 
@@ -49,7 +81,32 @@ const Home: React.FC = () => {
         </View>
 
         <View style={styles.footer}>
-
+        
+        
+        <View style={styles.select}>        
+        <RNPickerSelect
+            placeholder={{
+              label: 'Selecione um estado',
+              value: null,
+              color: '#9EA0A4',
+            }}
+            style={pickerSelectStyles}
+            onValueChange={(value) => {
+              setUf(value);
+            }}
+            items={ufs.map((uf) => {
+              return {
+                label: uf,
+                value: uf,
+              };
+            })}
+           
+            Icon={() => {
+              return <Entypo name="chevron-small-down" size={24} color="#ccc" />;
+            }}
+        />
+        </View>
+        <View style={styles.select}>    
         <RNPickerSelect
             placeholder={{
               label: 'Selecione uma cidade',
@@ -57,36 +114,24 @@ const Home: React.FC = () => {
               color: '#9EA0A4',
             }}
             style={pickerSelectStyles}
-            onValueChange={(value) => console.log(value)}
-            items={[
-                { label: 'Football', value: 'football' },
-                { label: 'Baseball', value: 'baseball' },
-                { label: 'Hockey', value: 'hockey' },
-            ]}
-            // style={styles.input} 
+            onValueChange={(value) => {
+              setCity(value);
+            }}
+            items={cities.map((city) => {
+              return {
+                label: city,
+                value: city,
+              };
+            })}
            
             Icon={() => {
               return <Entypo name="chevron-small-down" size={24} color="#ccc" />;
             }}
         />
-        {/* <TextInput 
-            style={styles.input} 
-            placeholder="Digite a UF"
-            value={uf}
-            onChangeText={setUf}
-            maxLength={2}
-            autoCapitalize="characters"
-            autoCorrect={false}
-            
-          /> */}
+        </View>
+        
 
-          <TextInput 
-            style={styles.input} 
-            placeholder="Digite a Cidade"
-            value={city}
-            autoCorrect={false}
-            onChangeText={setCity}
-          />
+         
           <RectButton style={styles.button} onPress={handleNavigateToPoints}>
             <View style={styles.buttonIcon}>
               <Text>
@@ -115,17 +160,11 @@ export default Home;
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     height: 60,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    marginBottom: 8,
     paddingHorizontal: 24,
     fontSize: 16,
   },
   inputAndroid: {
     height: 60,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    marginBottom: 8,
     paddingHorizontal: 24,
     fontSize: 16,
   },
@@ -172,7 +211,12 @@ const styles = StyleSheet.create({
 
  
 
-  select: {},
+  select: {
+    height: 60,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    marginBottom: 8,
+  },
 
   input: {
     height: 60,
