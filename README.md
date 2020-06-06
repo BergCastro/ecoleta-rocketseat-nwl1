@@ -47,19 +47,59 @@ This project was developed with the following technologies:
 
 To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js v10.16][nodejs] or higher installed on your computer. From your command line:
 
+
 ```bash
 # Clone this repository
 $ git clone https://github.com/BergCastro/ecoleta-rocketseat-nwl1 ecoleta
 
-# Go into the repository
-$ cd ecoleta
 
-# Go into the server
+```
+
+### Server
+
+```bash
+
 $ cd server
 
-# Install dependencies
+# install dependecies
 $ npm install
 
+# Run migrations
+$ npm run knex:migrate
+
+# Run seeds
+$ npm run knex:seed
+
+# Run server
+$ npm run dev
+
+```
+
+### Web
+
+```bash
+
+$ cd web
+
+# install dependecies
+$ yarn
+
+# Run application
+$ yarn start
+
+```
+
+### Mobile
+
+```bash
+
+$ cd mobile
+
+# install dependecies
+$ yarn
+
+# Run application
+$ yarn start
 
 ```
 
@@ -68,4 +108,4 @@ This project is under the MIT license. See the [LICENSE](https://github.com/Berg
 
 ---
 
-♥ In love Lindemberg Castro : [Get in touch!](https://www.linkedin.com/in/lindemberg-castro/)
+♥ In love for javascript - Lindemberg Castro : [See!](https://www.linkedin.com/in/lindemberg-castro/)
