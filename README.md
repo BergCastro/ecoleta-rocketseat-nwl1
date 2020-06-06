@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="ecoleta" src="./.github/ecoleta.png" />
+    <img alt="ecoleta" src="./.github/ecoleta-web.gif" />
     <br>
     Ecoleta
 </h1>
